@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARKX GAMES ZONE | Admin-Controlled Game Downloads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #ff0040;
+            --accent: #00ccff;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --neon-red: 0 0 15px #ff0040, 0 0 30px #ff0040, 0 0 45px #ff0040;
+            --neon-blue: 0 0 15px #00ccff, 0 0 30px #00ccff;
+            --neon-purple: 0 0 15px #9d00ff, 0 0 30px #9d00ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--darker);
+            color: #fff;
+            background-image: 
+                radial-gradient(circle at 5% 10%, rgba(255, 0, 64, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 95% 90%, rgba(0, 204, 255, 0.05) 0%, transparent 25%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Background Animation */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* HEADER */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 3px solid var(--secondary);
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--neon-red);
+            flex-wrap: wrap;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--secondary);
+            text-shadow: var(--neon-red);
+            letter-spacing: 4px;
+            margin-right: 30px;
+        }
+        
+        .logo span {
+            color: var(--accent);
+            text-shadow: var(--neon-blue);
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: #aaa;
+            font-weight: 300;
+            letter-spacing: 2px;
+            max-width: 400px;
+        }
+        
+        .admin-access {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* ADMIN BUTTON */
+        .admin-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #9d00ff, #ff0040);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.4);
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(157, 0, 255, 0.6);
+        }
+        
+        .admin-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* ADMIN LOGIN MODAL */
+        .admin-login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #0a0a0a, #111);
+            border: 3px solid var(--accent);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--neon-blue);
+            position: relative;
+        }
+        
+        .login-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-shadow: var(--neon-blue);
+        }
+        
+        .login-subtitle {
+            color: #aaa;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.3rem;
+            font-family: 'Orbitron', monospace;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+        }
+        
+        .login-error {
+            color: #ff0040;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* ADMIN PANEL - HIDDEN BY DEFAULT */
+        .admin-panel {
+            background: rgba(5, 5, 5, 0.98);
+            border: 3px solid var(--accent);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: var(--neon-blue);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 204, 255, 0.1), transparent);
+            animation: shine 4s infinite linear;
+            z-index: 0;
+        }
+        
+        .panel-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: var(--neon-blue);
+        }
+        
+        .admin-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 1100px) {
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--accent);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--secondary), #cc0033);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 64, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #0088cc);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 10px 25px rgba(0, 204, 255, 0.5);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #000;
+        }
+        
+        /* GAMES LIBRARY - INITIALLY EMPTY */
+        .games-section {
+            padding: 40px;
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 20px;
+            border: 2px solid var(--secondary);
+            box-shadow: var(--neon-red);
+            margin-bottom: 60px;
+            min-height: 400px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            color: var(--secondary);
+            text-shadow: var(--neon-red);
+            letter-spacing: 3px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            color: var(--secondary);
+        }
+        
+        .empty-library {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+            font-size: 1.5rem;
+        }
+        
+        .empty-library i {
+            font-size: 5rem;
+            color: #333;
+            margin-bottom: 30px;
+            display: block;
+        }
+        
+        /* FILTERS */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 12px 25px;
+            background: rgba(40, 40, 40, 0.9);
+            color: #aaa;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        /* GAMES GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+        }
+        
+        .game-card {
+            background: linear-gradient(145deg, #111, #0a0a0a);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #222;
+            transition: all 0.4s;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(255, 0, 64, 0.3);
+        }
+        
+        .game-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 204, 255, 0.3);
+        }
+        
+        .game-card.featured:hover {
+            box-shadow: 0 20px 40px rgba(0, 204, 255, 0.4);
+        }
+        
+        .game-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--secondary), #cc0033);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+        
+        .game-image {
+            height: 200px;
+            background: linear-gradient(135deg, #222, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .game-card:hover .game-image img {
+            transform: scale(1.1);
+        }
+        
+        .game-icon {
+            font-size: 5rem;
+            color: var(--accent);
+        }
+        
+        .game-content {
+            padding: 30px;
+        }
+        
+        .game-title {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .game-description {
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            height: 80px;
+            overflow: hidden;
+        }
+        
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .game-size {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .game-download-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--secondary), #cc0033);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .game-download-btn:hover {
+            background: linear-gradient(135deg, #ff2266, #aa0022);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 0, 64, 0.4);
+        }
+        
+        /* GAME LIST IN ADMIN */
+        .game-list-container {
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-list-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .game-list-item {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #444;
+            transition: all 0.3s;
+        }
+        
+        .game-list-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .game-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .game-list-name {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        
+        .game-list-category {
+            background: rgba(0, 204, 255, 0.2);
+            color: var(--accent);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        
+        .game-list-desc {
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .game-list-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .game-list-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background: rgba(40, 40, 40, 0.9);
+            color: #aaa;
+            border: 1px solid #444;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .action-btn.delete {
+            background: rgba(255, 0, 64, 0.2);
+            color: #ff0040;
+            border-color: #ff0040;
+        }
+        
+        .action-btn.delete:hover {
+            background: #ff0040;
+            color: white;
+        }
+        
+        /* FOOTER */
+        .main-footer {
+            padding: 60px 40px 30px;
+            background: rgba(5, 5, 5, 0.98);
+            border-radius: 20px 20px 0 0;
+            border-top: 3px solid var(--secondary);
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes shine {
+            0% { transform: rotate(0deg) translate(-10%, -10%); }
+            100% { transform: rotate(360deg) translate(-10%, -10%); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .main-header {
+                flex-direction: column;
+                gap: 25px;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .main-header, .games-section, .admin-panel {
+                padding: 25px;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .games-grid, .game-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <canvas id="particles"></canvas>
+    
+    <!-- Admin Login Modal -->
+    <div class="admin-login-modal" id="adminLoginModal">
+        <div class="login-container">
+            <h2 class="login-title">ADMIN ACCESS</h2>
+            <p class="login-subtitle">Enter password to open Admin Panel</p>
+            
+            <input type="password" class="password-input" id="adminPassword" placeholder="Enter password...">
+            <button class="btn btn-primary" id="loginBtn">
+                <i class="fas fa-lock-open"></i> UNLOCK PANEL
+            </button>
+            
+            <div class="login-error" id="loginError">
+                <i class="fas fa-exclamation-circle"></i> Incorrect password!
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 0.9rem;">
+                Default password: <strong>needed</strong>
+            </p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="logo-section">
+                <div class="logo">DARKX <span>GAMES ZONE</span></div>
+                <div class="tagline">ADMIN-CONTROLLED GAME DOWNLOADS | ADD GAMES VIA ADMIN PANEL</div>
+            </div>
+            
+            <div class="admin-access">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">GAMES</div>
+                </div>
+                <button class="admin-btn" id="openAdminBtn">
+                    <i class="fas fa-user-shield"></i> ADMIN PANEL
+                </button>
+            </div>
+        </header>
+        
+        <!-- ADMIN PANEL - HIDDEN BY DEFAULT -->
+        <section class="admin-panel" id="adminPanel">
+            <h2 class="panel-title">ADMIN CONTROL PANEL - ADD GAMES HERE</h2>
+            
+            <form class="admin-form" id="gameForm">
+                <div class="form-group">
+                    <label class="form-label">Game Name *</label>
+                    <input type="text" class="form-input" id="gameName" placeholder="Enter game title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Download Link *</label>
+                    <input type="url" class="form-input" id="gameLink" placeholder="https://example.com/game.zip" required>
+                    <small style="color: #aaa; display: block; margin-top: 5px;">This link will open directly when users click download</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Game Description *</label>
+                    <textarea class="form-input form-textarea" id="gameDescription" placeholder="Describe the game..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Game Size *</label>
+                    <input type="text" class="form-input" id="gameSize" placeholder="e.g., 2.5 GB" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <select class="form-input" id="gameCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="action">Action</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="rpg">RPG</option>
+                        <option value="racing">Racing</option>
+                        <option value="sports">Sports</option>
+                        <option value="strategy">Strategy</option>
+                        <option value="shooter">Shooter</option>
+                        <option value="simulation">Simulation</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Featured Game?</label>
+                    <select class="form-input" id="gameFeatured">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus-circle"></i> ADD GAME TO LIBRARY
+                    </button>
+                    <button type="button" class="btn" id="clearFormBtn">
+                        <i class="fas fa-broom"></i> CLEAR FORM
+                    </button>
+                    <button type="button" class="btn" id="closePanelBtn">
+                        <i class="fas fa-lock"></i> LOCK PANEL
+                    </button>
+                </div>
+            </form>
+            
+            <!-- EXISTING GAMES LIST -->
+            <div class="game-list-container">
+                <h3 class="game-list-title">MANAGE ADDED GAMES</h3>
+                <div id="gameList" class="game-list">
+                    <!-- Games will be dynamically added here -->
+                    <div class="empty-library" id="emptyGameList">
+                        <i class="fas fa-gamepad"></i>
+                        <p>No games added yet. Use the form above to add games.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- GAMES LIBRARY - INITIALLY EMPTY -->
+        <section class="games-section">
+            <div class="section-header">
+                <h2 class="section-title">GAMES LIBRARY</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalDownloads">0</div>
+                        <div class="stat-label">TOTAL DOWNLOADS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FILTERS -->
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search games...">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="filter-options">
+                    <button class="filter-btn active" data-filter="all">All Games</button>
+                    <button class="filter-btn" data-filter="action">Action</button>
+                    <button class="filter-btn" data-filter="adventure">Adventure</button>
+                    <button class="filter-btn" data-filter="rpg">RPG</button>
+                    <button class="filter-btn" data-filter="racing">Racing</button>
+                    <button class="filter-btn" data-filter="featured">Featured</button>
+                </div>
+            </div>
+            
+            <!-- GAMES GRID - INITIALLY EMPTY -->
+            <div class="games-grid" id="gamesGrid">
+                <div class="empty-library">
+                    <i class="fas fa-download"></i>
+                    <p>No games available. Admin needs to add games using the Admin Panel above.</p>
+                    <p style="margin-top: 15px; color: var(--accent); font-size: 1.2rem;">
+                        Games added via Admin Panel will appear here automatically.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FOOTER -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>DARKX GAMES ZONE</h3>
+                    <p style="color: #aaa; line-height: 1.7;">
+                        Admin-controlled game download platform. 
+                        All games are added through the Admin Panel above.
+                        Users can directly download games via the provided links.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>HOW TO USE</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-user-shield"></i> 1. Click "ADMIN PANEL" button</li>
+                        <li><i class="fas fa-lock"></i> 2. Enter password: DARKX-OFFICIAL 2025</li>
+                        <li><i class="fas fa-gamepad"></i> 3. Add games via form</li>
+                        <li><i class="fas fa-download"></i> 4. Users click to download</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>CATEGORIES</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-fist-raised"></i> Action</li>
+                        <li><i class="fas fa-hiking"></i> Adventure</li>
+                        <li><i class="fas fa-dragon"></i> RPG</li>
+                        <li><i class="fas fa-car"></i> Racing</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>ADMIN INFO</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-key"></i> Password: DARKX-OFFICIAL 2025</li>
+                        <li><i class="fas fa-edit"></i> Direct link input</li>
+                        <li><i class="fas fa-trash"></i> Delete games anytime</li>
+                        <li><i class="fas fa-sync"></i> Real-time updates</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2024 DARKX GAMES ZONE | ADMIN-CONTROLLED SYSTEM | All download links are provided by admin.</p>
+                <p style="margin-top: 10px; color: var(--accent);">
+                    SYSTEM STATUS: <span style="color: #00ff88;">ACTIVE</span> | 
+                    GAMES ADDED: <span id="footerGameCount">0</span> |
+                    <a href="#" id="adminAccessLink" style="color: var(--secondary); text-decoration: none; margin-left: 15px;">
+                        <i class="fas fa-user-shield"></i> Admin Access
+                    </a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // PARTICLE BACKGROUND
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particlesArray = [];
+        const particleCount = 100;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = Math.random() > 0.5 ? 'rgba(255, 0, 64, 0.3)' : 'rgba(0, 204, 255, 0.3)';
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        initParticles();
+        animateParticles();
+        
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // GAME DATA STORAGE - INITIALLY EMPTY
+        let games = [];
+        let gameIdCounter = 1;
+        let totalDownloads = 0;
+        
+        // DOM ELEMENTS
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const adminPanel = document.getElementById('adminPanel');
+        const openAdminBtn = document.getElementById('openAdminBtn');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+        const adminPasswordInput = document.getElementById('adminPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const adminAccessLink = document.getElementById('adminAccessLink');
+        const gameForm = document.getElementById('gameForm');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const gamesGrid = document.getElementById('gamesGrid');
+        const totalGamesElement = document.getElementById('totalGames');
+        const totalDownloadsElement = document.getElementById('totalDownloads');
+        const footerGameCount = document.getElementById('footerGameCount');
+        const gameList = document.getElementById('gameList');
+        const emptyGameList = document.getElementById('emptyGameList');
+        const searchInput = document.getElementById('searchInput');
+        
+        // ADMIN PANEL PASSWORD
+        const ADMIN_PASSWORD = "DARKX-OFFICIAL 2025";
+        
+        // OPEN ADMIN LOGIN MODAL
+        openAdminBtn.addEventListener('click', openAdminLogin);
+        adminAccessLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openAdminLogin();
+        });
+        
+        function openAdminLogin() {
+            adminLoginModal.style.display = 'flex';
+            adminPasswordInput.focus();
+        }
+        
+        // CLOSE ADMIN LOGIN MODAL
+        function closeAdminLogin() {
+            adminLoginModal.style.display = 'none';
+            adminPasswordInput.value = '';
+            loginError.style.display = 'none';
+        }
+        
+        // LOGIN FUNCTION
+        loginBtn.addEventListener('click', function() {
+            const password = adminPasswordInput.value.trim();
+            
+            if (password === ADMIN_PASSWORD) {
+                // Success - show admin panel
+                adminPanel.classList.add('active');
+                closeAdminLogin();
+                alert("Admin Panel unlocked successfully!");
+            } else {
+                // Show error
+                loginError.style.display = 'block';
+                adminPasswordInput.style.borderColor = '#ff0040';
+                adminPasswordInput.style.boxShadow = '0 0 20px rgba(255, 0, 64, 0.5)';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    adminPasswordInput.style.borderColor = '#333';
+                    adminPasswordInput.style.boxShadow = 'none';
+                }, 2000);
+            }
+        });
+        
+        // ENTER KEY TO LOGIN
+        adminPasswordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+        
+        // CLOSE ADMIN PANEL
+        closePanelBtn.addEventListener('click', function() {
+            adminPanel.classList.remove('active');
+            alert("Admin Panel locked!");
+        });
+        
+        // CLEAR FORM
+        clearFormBtn.addEventListener('click', function() {
+            gameForm.reset();
+        });
+        
+        // ADD NEW GAME
+        gameForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const gameName = document.getElementById('gameName').value.trim();
+            const gameLink = document.getElementById('gameLink').value.trim();
+            const gameDescription = document.getElementById('gameDescription').value.trim();
+            const gameSize = document.getElementById('gameSize').value.trim();
+            const gameCategory = document.getElementById('gameCategory').value;
+            const gameFeatured = document.getElementById('gameFeatured').value === 'yes';
+            
+            // Validate inputs
+            if (!gameName || !gameLink || !gameDescription || !gameSize || !gameCategory) {
+                alert("Please fill in all required fields!");
+                return;
+            }
+            
+            // Create new game object
+            const newGame = {
+                id: gameIdCounter++,
+                name: gameName,
+                link: gameLink,
+                description: gameDescription,
+                size: gameSize,
+                category: gameCategory,
+                featured: gameFeatured,
+                downloads: 0,
+                dateAdded: new Date().toLocaleDateString()
+            };
+            
+            // Add to games array
+            games.push(newGame);
+            
+            // Update UI
+            updateGameList();
+            renderGames();
+            
+            // Reset form
+            gameForm.reset();
+            
+            // Show success message
+            alert(`"${gameName}" has been added to the games library!`);
+        });
+        
+        // UPDATE GAME LIST IN ADMIN PANEL
+        function updateGameList() {
+            // Hide empty message if games exist
+            if (games.length > 0) {
+                emptyGameList.style.display = 'none';
+            } else {
+                emptyGameList.style.display = 'block';
+            }
+            
+            // Clear current list
+            gameList.innerHTML = '';
+            
+            // Add each game to the list
+            games.forEach(game => {
+                const gameItem = document.createElement('div');
+                gameItem.className = 'game-list-item';
+                gameItem.dataset.id = game.id;
+                
+                gameItem.innerHTML = `
+                    <div class="game-list-header">
+                        <div class="game-list-name">${game.name}</div>
+                        <div class="game-list-category">${game.category.toUpperCase()}</div>
+                    </div>
+                    <div class="game-list-desc">${game.description.substring(0, 100)}${game.description.length > 100 ? '...' : ''}</div>
+                    <div class="game-list-meta">
+                        <div class="game-size">${game.size}</div>
+                        <div>Downloads: ${game.downloads}</div>
+                    </div>
+                    <div class="game-list-actions">
+                        <button class="action-btn edit" onclick="editGame(${game.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete" onclick="deleteGame(${game.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+                
+                gameList.appendChild(gameItem);
+            });
+        }
+        
+        // DELETE GAME FUNCTION
+        window.deleteGame = function(id) {
+            if (confirm("Are you sure you want to delete this game?")) {
+                games = games.filter(game => game.id !== id);
+                updateGameList();
+                renderGames();
+                alert("Game deleted successfully!");
+            }
+        };
+        
+        // EDIT GAME FUNCTION
+        window.editGame = function(id) {
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+            
+            // Fill form with game data
+            document.getElementById('gameName').value = game.name;
+            document.getElementById('gameLink').value = game.link;
+            document.getElementById('gameDescription').value = game.description;
+            document.getElementById('gameSize').value = game.size;
+            document.getElementById('gameCategory').value = game.category;
+            document.getElementById('gameFeatured').value = game.featured ? 'yes' : 'no';
+            
+            // Remove game from array (will be re-added if form is submitted)
+            games = games.filter(g => g.id !== id);
+            
+            // Update UI
+            updateGameList();
+            renderGames();
+            
+            alert(`Editing "${game.name}". Make changes and click "ADD GAME TO LIBRARY" to save.`);
+        };
+        
+        // RENDER GAMES TO GRID
+        function renderGames(filter = 'all', searchTerm = '') {
+            // Clear current grid
+            gamesGrid.innerHTML = '';
+            
+            // If no games, show empty message
+            if (games.length === 0) {
+                gamesGrid.innerHTML = `
+                    <div class="empty-library">
+                        <i class="fas fa-download"></i>
+                        <p>No games available. Admin needs to add games using the Admin Panel above.</p>
+                        <p style="margin-top: 15px; color: var(--accent); font-size: 1.2rem;">
+                            Games added via Admin Panel will appear here automatically.
+                        </p>
+                    </div>
+                `;
+                
+                // Update counters
+                totalGamesElement.textContent = '0';
+                totalDownloadsElement.textContent = '0';
+                footerGameCount.textContent = '0';
+                return;
+            }
+            
+            let filteredGames = games;
+            
+            // Apply filter
+            if (filter !== 'all') {
+                if (filter === 'featured') {
+                    filteredGames = games.filter(game => game.featured);
+                } else {
+                    filteredGames = games.filter(game => game.category === filter);
+                }
+            }
+            
+            // Apply search
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredGames = filteredGames.filter(game => 
+                    game.name.toLowerCase().includes(term) || 
+                    game.description.toLowerCase().includes(term) ||
+                    game.category.toLowerCase().includes(term)
+                );
+            }
+            
+            // Update game count
+            totalGamesElement.textContent = filteredGames.length;
+            footerGameCount.textContent = filteredGames.length;
+            
+            // Calculate total downloads
+            totalDownloads = games.reduce((sum, game) => sum + game.downloads, 0);
+            totalDownloadsElement.textContent = totalDownloads;
+            
+            // Render each game
+            filteredGames.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = `game-card ${game.featured ? 'featured' : ''}`;
+                
+                // Icon based on category
+                const icons = {
+                    action: 'fa-fist-raised',
+                    adventure: 'fa-hiking',
+                    rpg: 'fa-dragon',
+                    racing: 'fa-car',
+                    sports: 'fa-futbol',
+                    strategy: 'fa-chess',
+                    shooter: 'fa-crosshairs',
+                    simulation: 'fa-cogs'
+                };
+                
+                gameCard.innerHTML = `
+                    ${game.featured ? '<div class="game-badge">FEATURED</div>' : ''}
+                    <div class="game-image">
+                        <i class="fas ${icons[game.category] || 'fa-gamepad'} game-icon"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">${game.name}</h3>
+                        <p class="game-description">${game.description}</p>
+                        <div class="game-meta">
+                            <span class="game-category">${game.category.toUpperCase()}</span>
+                            <span class="game-size">${game.size}</span>
+                        </div>
+                        <button class="game-download-btn" data-id="${game.id}">
+                            <i class="fas fa-download"></i> DOWNLOAD NOW
+                        </button>
+                        <div style="text-align: center; margin-top: 10px; color: #666; font-size: 0.9rem;">
+                            Downloads: ${game.downloads}
+                        </div>
+                    </div>
+                `;
+                
+                gamesGrid.appendChild(gameCard);
+            });
+            
+            // Add download event listeners
+            document.querySelectorAll('.game-download-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const gameId = parseInt(this.getAttribute('data-id'));
+                    const game = games.find(g => g.id === gameId);
+                    
+                    if (game) {
+                        // Increment download count
+                        game.downloads++;
+                        totalDownloads++;
+                        
+                        // Update UI
+                        totalDownloadsElement.textContent = totalDownloads;
+                        this.innerHTML = `<i class="fas fa-download"></i> DOWNLOADING...`;
+                        this.disabled = true;
+                        
+                        // Open the download link in new tab
+                        setTimeout(() => {
+                            window.open(game.link, '_blank');
+                            
+                            // Reset button after 2 seconds
+                            setTimeout(() => {
+                                this.innerHTML = `<i class="fas fa-download"></i> DOWNLOAD AGAIN`;
+                                this.disabled = false;
+                            }, 2000);
+                        }, 500);
+                        
+                        // Update game list
+                        updateGameList();
+                    }
+                });
+            });
+        }
+        
+        // FILTER FUNCTIONALITY
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get filter value
+                const filter = this.getAttribute('data-filter');
+                
+                // Get search term
+                const searchTerm = searchInput.value;
+                
+                // Render games with filter and search
+                renderGames(filter, searchTerm);
+            });
+        });
+        
+        // SEARCH FUNCTIONALITY
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value;
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            renderGames(activeFilter, searchTerm);
+        });
+        
+        // INITIALIZE ON LOAD
+        window.addEventListener('load', function() {
+            // Initial render (empty)
+            renderGames();
+            
+            // Initial game list update
+            updateGameList();
+        });
+    </script>
+</body>
+</html>
