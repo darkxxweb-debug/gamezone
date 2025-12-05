@@ -1,634 +1,209 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARKX GAMES ZONE | ONLINE STORAGE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #ff0040, #9d00ff);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(255, 0, 64, 0.3);
-        }
-        
-        .logo {
-            font-size: 2.8rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px #ff0040;
-        }
-        
-        .logo span {
-            color: #00ccff;
-        }
-        
-        .subtitle {
-            color: #ddd;
-            font-size: 1.1rem;
-        }
-        
-        .admin-btn {
-            background: #00ccff;
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-        
-        .admin-btn:hover {
-            background: #ff0040;
-            color: white;
-            transform: translateY(-3px);
-        }
-        
-        .admin-panel {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border: 2px solid #00ccff;
-            display: none;
-        }
-        
-        .admin-panel.active {
-            display: block;
-        }
-        
-        .panel-title {
-            color: #00ccff;
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8rem;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #00ccff;
-            font-weight: 600;
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-        
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .btn {
-            background: #ff0040;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-        
-        .btn-success {
-            background: #00cc66;
-        }
-        
-        .btn-primary {
-            background: #00ccff;
-            color: black;
-        }
-        
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .game-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #333;
-            transition: all 0.3s;
-        }
-        
-        .game-card:hover {
-            border-color: #00ccff;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 204, 255, 0.2);
-        }
-        
-        .game-title {
-            color: #ff0040;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-        
-        .game-description {
-            color: #ccc;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-        
-        .game-meta {
-            display: flex;
-            justify-content: space-between;
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-        
-        .download-btn {
-            background: linear-gradient(135deg, #ff0040, #cc0033);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .download-btn:hover {
-            background: linear-gradient(135deg, #ff2266, #ff0040);
-        }
-        
-        .stats {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            color: #00ccff;
-            font-weight: bold;
-        }
-        
-        .status {
-            background: rgba(0, 255, 136, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 15px 0;
-            border: 1px solid #00ff88;
-        }
-        
-        .login-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            display: none;
-        }
-        
-        .login-box {
-            background: #1a1a2e;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            border: 2px solid #00ccff;
-            max-width: 400px;
-            width: 90%;
-        }
-        
-        @media (max-width: 768px) {
-            .games-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .logo {
-                font-size: 2rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARKX GAMES ZONE | ONLINE STORAGE</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body {background:linear-gradient(135deg,#0a0a0a,#1a1a2e);color:white;min-height:100vh;padding:20px;}
+.container {max-width:1200px;margin:0 auto;}
+.header {background:linear-gradient(135deg,#ff0040,#9d00ff);padding:25px;border-radius:15px;text-align:center;margin-bottom:30px;box-shadow:0 10px 30px rgba(255,0,64,0.3);}
+.logo {font-size:2.8rem;font-weight:900;margin-bottom:10px;text-shadow:0 0 15px #ff0040;}
+.logo span {color:#00ccff;}
+.subtitle {color:#ddd;font-size:1.1rem;}
+.admin-btn {background:#00ccff;color:#000;border:none;padding:12px 30px;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:1.1rem;transition:all 0.3s;}
+.admin-btn:hover {background:#ff0040;color:white;transform:translateY(-3px);}
+.admin-panel {background:rgba(255,255,255,0.05);padding:25px;border-radius:15px;margin-bottom:30px;border:2px solid #00ccff;display:none;}
+.admin-panel.active {display:block;}
+.panel-title {color:#00ccff;text-align:center;margin-bottom:25px;font-size:1.8rem;}
+.form-group {margin-bottom:15px;}
+label {display:block;margin-bottom:8px;color:#00ccff;font-weight:600;}
+input,textarea,select {width:100%;padding:12px;background:rgba(255,255,255,0.1);border:1px solid #333;border-radius:8px;color:white;font-size:1rem;}
+textarea {min-height:100px;resize:vertical;}
+.btn {background:#ff0040;color:white;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-weight:bold;margin-right:10px;margin-top:10px;}
+.btn-success {background:#00cc66;}
+.btn-primary {background:#00ccff;color:black;}
+.games-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:30px;}
+.game-card {background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;border:1px solid #333;transition:all 0.3s;position:relative;}
+.game-card:hover {border-color:#00ccff;transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,204,255,0.2);}
+.game-title {color:#ff0040;font-size:1.4rem;margin-bottom:10px;}
+.game-description {color:#ccc;margin-bottom:15px;font-size:0.9rem;}
+.game-meta {display:flex;justify-content:space-between;color:#888;font-size:0.9rem;margin-bottom:15px;}
+.download-btn {background:linear-gradient(135deg,#ff0040,#cc0033);color:white;border:none;padding:12px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;transition:all 0.3s;}
+.download-btn:hover {background:linear-gradient(135deg,#ff2266,#ff0040);}
+.status {background:rgba(0,255,136,0.1);padding:10px;border-radius:8px;text-align:center;margin:15px 0;border:1px solid #00ff88;}
+.login-modal {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;justify-content:center;align-items:center;z-index:1000;display:none;}
+.login-box {background:#1a1a2e;padding:40px;border-radius:15px;text-align:center;border:2px solid #00ccff;max-width:400px;width:90%;}
+@media (max-width:768px){.games-grid{grid-template-columns:1fr;}.logo{font-size:2rem;}}
+</style>
 </head>
 <body>
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-box">
-            <h2 style="color: #00ccff; margin-bottom: 20px;">ADMIN LOGIN</h2>
-            <input type="password" id="passwordInput" placeholder="Enter Password" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #333; background: rgba(255,255,255,0.1); color: white;">
-            <button class="btn btn-primary" onclick="checkPassword()" style="width: 100%;">LOGIN</button>
-            <p id="loginError" style="color: #ff0040; margin-top: 10px; display: none;">Wrong Password!</p>
-            <p style="color: #888; margin-top: 20px; font-size: 0.9rem;">Password: <strong>DARKX2025</strong></p>
-        </div>
+<div class="login-modal" id="loginModal">
+    <div class="login-box">
+        <h2 style="color:#00ccff;margin-bottom:20px;">ADMIN LOGIN</h2>
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+        <button class="btn btn-primary" onclick="checkPassword()" style="width:100%;">LOGIN</button>
+        <p id="loginError" style="color:#ff0040;margin-top:10px;display:none;">Wrong Password!</p>
     </div>
-    
-    <div class="container">
-        <!-- HEADER -->
-        <div class="header">
-            <div class="logo">DARKX <span>GAMES ZONE</span></div>
-            <div class="subtitle">ONLINE GAME STORAGE - GAMES SAVED IN CLOUD</div>
-            <button class="admin-btn" onclick="showLogin()">
-                <i class="fas fa-user-shield"></i> ADMIN PANEL
-            </button>
-        </div>
-        
-        <!-- STATUS -->
-        <div class="status" id="status">
-            <i class="fas fa-sync fa-spin"></i> Loading games from online database...
-        </div>
-        
-        <!-- STATS -->
-        <div class="stats">
-            <div class="stat-value" id="totalGames">0</div>
-            <div>GAMES IN DATABASE</div>
-            <div style="color: #888; margin-top: 10px; font-size: 0.9rem;">
-                <i class="fas fa-cloud"></i> Online Storage Active | 
-                <i class="fas fa-users"></i> All users see same games
-            </div>
-        </div>
-        
-        <!-- ADMIN PANEL -->
-        <div class="admin-panel" id="adminPanel">
-            <h2 class="panel-title">ADD NEW GAME</h2>
-            
-            <div class="form-group">
-                <label>Game Name:</label>
-                <input type="text" id="gameName" placeholder="e.g., GTA VI">
-            </div>
-            
-            <div class="form-group">
-                <label>Download Link:</label>
-                <input type="text" id="gameLink" placeholder="https://example.com/game.zip">
-            </div>
-            
-            <div class="form-group">
-                <label>Description:</label>
-                <textarea id="gameDesc" placeholder="Game description..."></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>Size:</label>
-                <input type="text" id="gameSize" placeholder="e.g., 2.5 GB">
-            </div>
-            
-            <div class="form-group">
-                <label>Category:</label>
-                <select id="gameCategory">
-                    <option value="action">Action</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="racing">Racing</option>
-                    <option value="sports">Sports</option>
-                </select>
-            </div>
-            
-            <button class="btn btn-success" onclick="addGame()">
-                <i class="fas fa-plus"></i> ADD GAME TO DATABASE
-            </button>
-            <button class="btn" onclick="hideAdmin()">
-                <i class="fas fa-times"></i> CLOSE PANEL
-            </button>
-        </div>
-        
-        <!-- GAMES LIST -->
-        <h2 style="color: #00ccff; margin: 30px 0 20px 0;">AVAILABLE GAMES</h2>
-        <div class="games-grid" id="gamesList">
-            <!-- Games will load here -->
-            <div style="text-align: center; padding: 40px; color: #888;">
-                <i class="fas fa-spinner fa-spin fa-2x"></i>
-                <p style="margin-top: 15px;">Loading games from online database...</p>
-            </div>
-        </div>
-        
-        <!-- FOOTER -->
-        <div style="text-align: center; margin-top: 50px; color: #666; padding: 20px; border-top: 1px solid #333;">
-            <p>© 2024 DARKX GAMES ZONE | ONLINE STORAGE SYSTEM</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">
-                <i class="fas fa-database"></i> Using JSONBin.io Cloud Database | 
-                <i class="fas fa-globe"></i> All data saved online
-            </p>
-        </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">DARKX <span>GAMES ZONE</span></div>
+        <div class="subtitle">ONLINE GAME STORAGE - GAMES SAVED IN CLOUD</div>
+        <button class="admin-btn" onclick="showLogin()">
+            <i class="fas fa-user-shield"></i> ADMIN PANEL
+        </button>
     </div>
 
-    <script>
-        // =========================
-        // ONLINE DATABASE CONFIG
-        // =========================
-        // JSONBin.io ni FREE online database
-        // Bin ID yetu (binafsi yako)
-        const BIN_ID = '67f0a3a4acd3cb34a8cb8a1f';
-        const MASTER_KEY = '$2a$10$CxcwgEIgYR9kdsHbLuydCOFEu7wP4Pnx92q/lrASD7E.y05dTfPPe';
-        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        
-        // =========================
-        // GLOBAL VARIABLES
-        // =========================
-        let games = [];
-        
-        // =========================
-        // LOAD GAMES FROM ONLINE DB
-        // =========================
-        async function loadGames() {
-            try {
-                document.getElementById('status').innerHTML = '<i class="fas fa-sync fa-spin"></i> Connecting to online database...';
-                
-                const response = await fetch(API_URL, {
-                    headers: {
-                        'X-Master-Key': MASTER_KEY
-                    }
-                });
-                
-                const data = await response.json();
-                
-                // Check if we have games data
-                if (data.record && data.record.games) {
-                    games = data.record.games;
-                } else {
-                    // Initialize with empty array if no data
-                    games = [];
-                }
-                
-                document.getElementById('status').innerHTML = '<i class="fas fa-check-circle"></i> Online database connected! Games loaded successfully.';
-                document.getElementById('status').style.background = 'rgba(0, 255, 136, 0.1)';
-                document.getElementById('status').style.border = '1px solid #00ff88';
-                
-                updateGameDisplay();
-                
-            } catch (error) {
-                console.error('Error loading games:', error);
-                document.getElementById('status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Using local storage. Internet required for online sync.';
-                document.getElementById('status').style.background = 'rgba(255, 204, 0, 0.1)';
-                document.getElementById('status').style.border = '1px solid #ffcc00';
-                
-                // Try to load from local storage
-                const localGames = localStorage.getItem('darkx_games_backup');
-                if (localGames) {
-                    games = JSON.parse(localGames);
-                    updateGameDisplay();
-                }
-            }
+    <div class="status" id="status">
+        <i class="fas fa-sync fa-spin"></i> Loading games from cloud...
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="adminPanel">
+        <h2 class="panel-title">ADD NEW GAME</h2>
+        <div class="form-group"><label>Game Name:</label><input type="text" id="gameName" placeholder="e.g., GTA VI"></div>
+        <div class="form-group"><label>Download Link:</label><input type="text" id="gameLink" placeholder="https://example.com/game.zip"></div>
+        <div class="form-group"><label>Description:</label><textarea id="gameDesc" placeholder="Game description..."></textarea></div>
+        <div class="form-group"><label>Size:</label><input type="text" id="gameSize" placeholder="e.g., 2.5 GB"></div>
+        <div class="form-group"><label>Category:</label>
+            <select id="gameCategory">
+                <option value="action">Action</option>
+                <option value="adventure">Adventure</option>
+                <option value="racing">Racing</option>
+                <option value="sports">Sports</option>
+            </select>
+        </div>
+        <button class="btn btn-success" onclick="addGame()"><i class="fas fa-plus"></i> ADD GAME</button>
+        <button class="btn" onclick="hideAdmin()"><i class="fas fa-times"></i> CLOSE PANEL</button>
+    </div>
+
+    <!-- GAMES LIST -->
+    <h2 style="color:#00ccff;margin:30px 0 20px 0;">AVAILABLE GAMES</h2>
+    <div class="games-grid" id="gamesList">
+        <div style="text-align:center;padding:40px;color:#888;">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top:15px;">Loading games from cloud...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA7xpCvPWlVF4Cjyr-T3maagrKUF5zebcI",
+  authDomain: "gamezone-26e95.firebaseapp.com",
+  databaseURL: "https://gamezone-26e95-default-rtdb.firebaseio.com",
+  projectId: "gamezone-26e95",
+  storageBucket: "gamezone-26e95.appspot.com",
+  messagingSenderId: "823410616788",
+  appId: "1:823410616788:web:303655cfc06fc9a4fd4e41"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let isAdmin = false;
+const adminPassword = 'DARKX2025';
+
+// =========================
+// ADMIN LOGIN
+// =========================
+function showLogin() { document.getElementById('loginModal').style.display='flex'; }
+function checkPassword() {
+    const pw = document.getElementById('passwordInput').value;
+    if(pw === adminPassword){
+        isAdmin = true;
+        document.getElementById('loginModal').style.display='none';
+        document.getElementById('adminPanel').classList.add('active');
+        document.getElementById('passwordInput').value='';
+        document.getElementById('loginError').style.display='none';
+    }else{
+        document.getElementById('loginError').style.display='block';
+    }
+}
+function hideAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
+
+// =========================
+// LOAD GAMES
+// =========================
+function loadGames(){
+    document.getElementById('status').innerHTML='<i class="fas fa-sync fa-spin"></i> Loading games from cloud...';
+    db.ref('games').once('value', snapshot=>{
+        const data = snapshot.val();
+        displayGames(data||{});
+        document.getElementById('status').innerHTML='<i class="fas fa-check-circle"></i> Games loaded!';
+    });
+}
+
+// =========================
+// DISPLAY GAMES
+// =========================
+function displayGames(data){
+    const gamesList = document.getElementById('gamesList');
+    gamesList.innerHTML='';
+    const keys = Object.keys(data);
+    if(keys.length===0){
+        gamesList.innerHTML='<div style="text-align:center;padding:50px;color:#888;"><i class="fas fa-gamepad fa-3x"></i><h3 style="margin:20px 0 10px 0;color:#ff0040;">No Games Yet</h3><p>Admin needs to add games</p></div>';
+        return;
+    }
+    keys.reverse().forEach(k=>{
+        const g = data[k];
+        const card = document.createElement('div');
+        card.className='game-card';
+        card.innerHTML=`<h3 class="game-title">${g.name}</h3>
+            <p class="game-description">${g.description}</p>
+            <div class="game-meta"><span>${g.category.toUpperCase()}</span><span>${g.size}</span></div>
+            <button class="download-btn" onclick="window.open('${g.link}','_blank')"><i class="fas fa-download"></i> DOWNLOAD NOW</button>`;
+        if(isAdmin){
+            const delBtn = document.createElement('button');
+            delBtn.style='background:none;border:none;color:#ff0040;cursor:pointer;font-size:0.8rem;position:absolute;top:10px;right:10px;';
+            delBtn.innerHTML='<i class="fas fa-trash"></i> Delete';
+            delBtn.onclick=()=>deleteGame(k);
+            card.appendChild(delBtn);
         }
-        
-        // =========================
-        // SAVE GAMES TO ONLINE DB
-        // =========================
-        async function saveGames() {
-            try {
-                const dataToSave = {
-                    games: games,
-                    lastUpdated: new Date().toISOString()
-                };
-                
-                const response = await fetch(API_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
-                    },
-                    body: JSON.stringify(dataToSave)
-                });
-                
-                // Also save to local storage as backup
-                localStorage.setItem('darkx_games_backup', JSON.stringify(games));
-                
-                document.getElementById('status').innerHTML = '<i class="fas fa-save"></i> Games saved to cloud database!';
-                setTimeout(() => {
-                    document.getElementById('status').innerHTML = '<i class="fas fa-check-circle"></i> Online database active';
-                }, 2000);
-                
-                return true;
-            } catch (error) {
-                console.error('Error saving games:', error);
-                document.getElementById('status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Saved locally. Will sync when online.';
-                
-                // Save to local storage anyway
-                localStorage.setItem('darkx_games_backup', JSON.stringify(games));
-                return false;
-            }
-        }
-        
-        // =========================
-        // UPDATE GAME DISPLAY
-        // =========================
-        function updateGameDisplay() {
-            const gamesList = document.getElementById('gamesList');
-            const totalGames = document.getElementById('totalGames');
-            
-            // Update count
-            totalGames.textContent = games.length;
-            
-            if (games.length === 0) {
-                gamesList.innerHTML = `
-                    <div style="text-align: center; padding: 50px; color: #888; grid-column: 1/-1;">
-                        <i class="fas fa-gamepad fa-3x"></i>
-                        <h3 style="margin: 20px 0 10px 0; color: #ff0040;">No Games Yet</h3>
-                        <p>Admin needs to add games using the Admin Panel above</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Display games
-            let gamesHTML = '';
-            
-            games.forEach((game, index) => {
-                gamesHTML += `
-                    <div class="game-card">
-                        <h3 class="game-title">${game.name}</h3>
-                        <p class="game-description">${game.description}</p>
-                        <div class="game-meta">
-                            <span>${game.category.toUpperCase()}</span>
-                            <span>${game.size}</span>
-                        </div>
-                        <button class="download-btn" onclick="downloadGame(${index})">
-                            <i class="fas fa-download"></i> DOWNLOAD NOW
-                        </button>
-                        <div style="text-align: right; margin-top: 10px;">
-                            <button onclick="deleteGame(${index})" style="background: none; border: none; color: #ff0040; cursor: pointer; font-size: 0.8rem;">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            gamesList.innerHTML = gamesHTML;
-        }
-        
-        // =========================
-        // ADD NEW GAME
-        // =========================
-        async function addGame() {
-            const name = document.getElementById('gameName').value.trim();
-            const link = document.getElementById('gameLink').value.trim();
-            const desc = document.getElementById('gameDesc').value.trim();
-            const size = document.getElementById('gameSize').value.trim();
-            const category = document.getElementById('gameCategory').value;
-            
-            if (!name || !link || !desc || !size) {
-                alert('Please fill all fields!');
-                return;
-            }
-            
-            const newGame = {
-                id: Date.now(),
-                name: name,
-                link: link,
-                description: desc,
-                size: size,
-                category: category,
-                dateAdded: new Date().toLocaleDateString(),
-                downloads: 0
-            };
-            
-            games.unshift(newGame); // Add to beginning
-            
-            // Save to online database
-            await saveGames();
-            
-            // Update display
-            updateGameDisplay();
-            
-            // Clear form
-            document.getElementById('gameName').value = '';
-            document.getElementById('gameLink').value = '';
-            document.getElementById('gameDesc').value = '';
-            document.getElementById('gameSize').value = '';
-            
-            alert('Game added successfully to online database!');
-        }
-        
-        // =========================
-        // DOWNLOAD GAME
-        // =========================
-        function downloadGame(index) {
-            const game = games[index];
-            
-            if (!game) return;
-            
-            // Update download count
-            game.downloads = (game.downloads || 0) + 1;
-            
-            // Save to database
-            saveGames();
-            
-            // Open download link
-            window.open(game.link, '_blank');
-            
-            // Update button text
-            const buttons = document.querySelectorAll('.download-btn');
-            if (buttons[index]) {
-                const originalText = buttons[index].innerHTML;
-                buttons[index].innerHTML = '<i class="fas fa-check"></i> DOWNLOADING...';
-                buttons[index].disabled = true;
-                
-                setTimeout(() => {
-                    buttons[index].innerHTML = originalText;
-                    buttons[index].disabled = false;
-                }, 2000);
-            }
-        }
-        
-        // =========================
-        // DELETE GAME
-        // =========================
-        async function deleteGame(index) {
-            if (confirm('Are you sure you want to delete this game?')) {
-                games.splice(index, 1);
-                await saveGames();
-                updateGameDisplay();
-            }
-        }
-        
-        // =========================
-        // ADMIN FUNCTIONS
-        // =========================
-        function showLogin() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-        
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            const error = document.getElementById('loginError');
-            
-            if (password === 'DARKX2025') {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('adminPanel').classList.add('active');
-                document.getElementById('passwordInput').value = '';
-                error.style.display = 'none';
-            } else {
-                error.style.display = 'block';
-            }
-        }
-        
-        function hideAdmin() {
-            document.getElementById('adminPanel').classList.remove('active');
-        }
-        
-        // =========================
-        // AUTO LOAD EVERY 30 SECONDS
-        // =========================
-        function autoRefresh() {
-            setInterval(() => {
-                loadGames();
-            }, 30000); // 30 seconds
-        }
-        
-        // =========================
-        // INITIALIZE
-        // =========================
-        window.onload = function() {
-            // Load games immediately
-            loadGames();
-            
-            // Start auto-refresh
-            autoRefresh();
-            
-            // Auto-hide status after 5 seconds
-            setTimeout(() => {
-                document.getElementById('status').style.opacity = '0.7';
-            }, 5000);
-        };
-    </script>
+        gamesList.appendChild(card);
+    });
+}
+
+// =========================
+// ADD GAME
+// =========================
+function addGame(){
+    if(!isAdmin){ alert('Only admin can add games'); return; }
+    const name = document.getElementById('gameName').value.trim();
+    const link = document.getElementById('gameLink').value.trim();
+    const desc = document.getElementById('gameDesc').value.trim();
+    const size = document.getElementById('gameSize').value.trim();
+    const category = document.getElementById('gameCategory').value;
+    if(!name||!link||!desc||!size){ alert('Please fill all fields'); return; }
+    const newKey = db.ref().child('games').push().key;
+    db.ref('games/'+newKey).set({name,link,description:desc,size,category,dateAdded:new Date().toLocaleDateString()})
+      .then(()=>{ alert('Game added successfully'); loadGames();
+        document.getElementById('gameName').value=''; document.getElementById('gameLink').value='';
+        document.getElementById('gameDesc').value=''; document.getElementById('gameSize').value='';
+      });
+}
+
+// =========================
+// DELETE GAME
+// =========================
+function deleteGame(key){
+    if(confirm('Are you sure to delete this game?')){
+        db.ref('games/'+key).remove().then(()=>loadGames());
+    }
+}
+
+// =========================
+// AUTO REFRESH
+// =========================
+setInterval(loadGames,30000);
+window.onload=loadGames;
+</script>
 </body>
-    </html>
+</html>
